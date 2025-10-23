@@ -1,20 +1,42 @@
-const Aternode = require('aternode')
+const puppeteer = require('puppeteer')
 const { createClient } = require('bedrock-protocol')
 
-const aternos = new Aternode()
-
-// Credenciais do Aternos (⚠️ cuidado se for repositório público!)
+// ⚠️ Credenciais do Aternos (NÃO use em repositório público!)
 const USER = 'Dudustr10'
 const PASS = 'Dudu@helo'
-const SERVER_NAME = 'Dudustr10-elIt'
+const SERVER_URL = 'https://aternos.org/server/' // link do painel do seu servidor
 
 let client = null
 
-// Função para rodar o bot AFK
+// Função para logar no Aternos e clicar Start
+async function startServer() {
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox'] })
+  const page = await browser.newPage()
+
+  await page.goto('https://aternos.org/go/')
+  await page.type('#user', USER)
+  await page.type('#password', PASS)
+  await page.click('#login')
+
+  await page.waitForNavigation()
+  await page.goto(SERVER_URL)
+
+  await page.waitForSelector('.server-start')
+  await page.click('.server-start')
+
+  console.log('🚀 Servidor Aternos iniciado!')
+
+  await browser.close()
+
+  // Espera 2 minutos para o servidor ligar e conecta o bot
+  setTimeout(startBot, 120_000)
+}
+
+// Bot AFK
 function startBot() {
   client = createClient({
-    host: 'Dudustr10-elIt.aternos.me',
-    port: 21553,
+    host: 'Dudustr10-elIt.aternos.me', // IP do servidor
+    port: 21553,                       // Porta do servidor
     username: 'BotAFK'
   })
 
@@ -36,27 +58,13 @@ function startBot() {
         riding_eid: 0,
         tick: BigInt(Date.now())
       })
-    }, 50) // 20 vezes por segundo
+    }, 50)
   })
 
   client.on('disconnect', () => {
     console.log('⚠️ Bot desconectado, tentando reconectar...')
     setTimeout(startBot, 5000)
   })
-}
-
-// Função para iniciar o servidor e depois rodar o bot
-async function startServer() {
-  await aternos.login({ user: USER, password: PASS })
-  const servers = await aternos.getServers()
-  const server = servers.find(s => s.name === SERVER_NAME)
-  if (server) {
-    await server.start()
-    console.log('🚀 Servidor Aternos iniciado!')
-    setTimeout(startBot, 60_000) // espera 1 min e inicia o bot
-  } else {
-    console.log('❌ Servidor não encontrado')
-  }
 }
 
 // 🚀 Executa automaticamente quando o Render iniciar
