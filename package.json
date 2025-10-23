@@ -1,12 +1,14 @@
 {
-  "name": "bot-afk",
+  "name": "aternos-bot",
   "version": "1.0.0",
-  "description": "Bot AFK para manter servidor Aternos Bedrock online",
-  "main": "bot.js",
+  "description": "Bot AFK + Scheduler para servidor Aternos",
+  "main": "scheduler.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node scheduler.js"
   },
   "dependencies": {
-    "bedrock-protocol": "^3.48.1"
+    "aternode": "^1.0.7",
+    "bedrock-protocol": "^3.48.1",
+    "node-schedule": "^2.1.1"
   }
 }
