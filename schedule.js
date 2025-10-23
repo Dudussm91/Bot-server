@@ -6,14 +6,14 @@ const aternos = new Aternode()
 // Função para iniciar o servidor
 async function startServer() {
   await aternos.login({
-    user: process.env.ATERNOS_USER,
-    password: process.env.ATERNOS_PASS
+    user: 'Dudustr10',       // seu usuário
+    password: 'Dudu@helo'    // sua senha
   })
   const servers = await aternos.getServers()
   const server = servers.find(s => s.name === 'Dudustr10-elIt')
   if (server) {
     await server.start()
-    console.log('🚀 Servidor iniciado!')
+    console.log('🚀 Servidor Aternos iniciado!')
   } else {
     console.log('❌ Servidor não encontrado')
   }
@@ -22,14 +22,14 @@ async function startServer() {
 // Função para parar o servidor
 async function stopServer() {
   await aternos.login({
-    user: process.env.ATERNOS_USER,
-    password: process.env.ATERNOS_PASS
+    user: 'Dudustr10',
+    password: 'Dudu@helo'
   })
   const servers = await aternos.getServers()
   const server = servers.find(s => s.name === 'Dudustr10-elIt')
   if (server) {
     await server.stop()
-    console.log('⏹️ Servidor parado!')
+    console.log('⏹️ Servidor Aternos parado!')
   } else {
     console.log('❌ Servidor não encontrado')
   }
